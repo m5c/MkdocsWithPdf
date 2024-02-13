@@ -29,27 +29,27 @@ class HeadlessChromeDriver(object):
 
             # Convert each Mermaid diagram to an image.
             for i, mermaid_code in enumerate(mermaid_matches):
-                self._logger.info("Converting diagram.")
+                self._logger.info(f"Converting mermaid diagram {i}")
+
                 # Create a temporary file to hold the Mermaid code.
-                with open(temporary_directory / f"diagram_{i + 1}.mmd", "wb") as mermaid_file:
-                    # Write the Mermaid code to the file.
+                mermaid_file_path = temporary_directory / f"diagram_{i + 1}.mmd"
+                with open(mermaid_file_path, "wb") as mermaid_file:
                     mermaid_code_unescaped = html_lib.unescape(mermaid_code)
                     mermaid_file.write(mermaid_code_unescaped.encode("utf-8"))
-                    mermaid_file.flush()
 
-                    # Create a filename for the image.
-                    image_filename = str(temporary_directory / f"diagram_{i+1}.png")
+                # Create a filename for the image.
+                image_file_path = temporary_directory / f"diagram_{i + 1}.png"
 
-                    # Convert the Mermaid diagram to an image using mmdc.
-                    command = f"mmdc -i {mermaid_file.name} -o {image_filename} -b transparent -t dark --scale 4"
+                # Convert the Mermaid diagram to an image using mmdc.
+                command = f"mmdc -i {mermaid_file_path} -o {image_file_path} -b transparent -t dark --scale 4 --quiet"
 
-                    os.system(command)
+                os.system(command)
 
-                    # Replace the Mermaid code with the image in the HTML string.
-                    image_html = f'<img src="file://{os.path.abspath(image_filename)}" alt="Mermaid diagram {i+1}">'
-                    html = html.replace(f'<pre class="mermaid"><code>{mermaid_code}</code></pre>', image_html)
+                # Replace the Mermaid code with the image in the HTML string.
+                image_html = f'<img src="file://{image_file_path}" alt="Mermaid diagram {i+1}">'
+                html = html.replace(f'<pre class="mermaid"><code>{mermaid_code}</code></pre>', image_html)
 
-            self._logger.info(html)
+            self._logger.info(f"Post mermaid translation: {html}")
             with open(temporary_directory / "post_mermaid_translation.html", "wb") as temp:
                 temp.write(html.encode('utf-8'))
 
@@ -65,7 +65,7 @@ class HeadlessChromeDriver(object):
                         '--dump-dom',
                         temp.name], stdout=PIPE) as chrome:
                 chrome_output = chrome.stdout.read().decode('utf-8')
-                self._logger.info(chrome_output)
+                self._logger.info(f"Post chrome translation: {chrome_output}")
                 return chrome_output
 
         except Exception as e:
