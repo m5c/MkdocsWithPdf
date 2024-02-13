@@ -31,7 +31,7 @@ class HeadlessChromeDriver(object):
             for i, mermaid_code in enumerate(mermaid_matches):
                 self._logger.info("Converting diagram.")
                 # Create a temporary file to hold the Mermaid code.
-                with open(temporary_directory / f"diagram_{i + 1}.mmd") as mermaid_file:
+                with open(temporary_directory / f"diagram_{i + 1}.mmd", "wb") as mermaid_file:
                     # Write the Mermaid code to the file.
                     mermaid_code_unescaped = html_lib.unescape(mermaid_code)
                     mermaid_file.write(mermaid_code_unescaped.encode("utf-8"))
