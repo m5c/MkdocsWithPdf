@@ -4,6 +4,8 @@ import re
 from typing import Pattern
 from importlib import import_module
 from importlib.util import module_from_spec, spec_from_file_location
+import pathlib
+import shutil
 
 from bs4 import BeautifulSoup, PageElement
 from weasyprint import HTML, urls
@@ -143,7 +145,11 @@ class Generator(object):
         if self._options.relaxed_js:
             html_string = str(soup)
         else:
-            html_string = self._render_js(soup)
+            temporary_directory = pathlib.Path(config['site_dir']) / "temp"
+            if not temporary_directory.exists():
+                temporary_directory.mkdir()
+            html_string = self._render_js(soup, temporary_directory)
+            shutil.rmtree(temporary_directory)
 
         html_string = self._options.hook.pre_pdf_render(html_string)
 
@@ -290,7 +296,7 @@ class Generator(object):
     # -------------------------------------------------------------
 
     @property
-    def logger(self) -> logging:
+    def logger(self) -> logging.Logger:
         return self._options.logger
 
     def _load_theme_handler(self):
@@ -372,7 +378,7 @@ class Generator(object):
 
     # -------------------------------------------------------------
 
-    def _render_js(self, soup):
+    def _render_js(self, soup, temporary_directory: pathlib.Path):
         if not self._options.js_renderer:
             fix_twemoji(soup, self._options.logger)
             return str(soup)
@@ -392,7 +398,7 @@ class Generator(object):
                 for src in scripts:
                     body.append(soup.new_tag('script', src=f'file://{src}'))
 
-        return self._options.js_renderer.render(str(soup))
+        return self._options.js_renderer.render(str(soup), temporary_directory)
 
     def _scrap_scripts(self, soup):
         if not self._options.js_renderer:
