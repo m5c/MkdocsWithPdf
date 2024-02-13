@@ -64,7 +64,9 @@ class HeadlessChromeDriver(object):
                         '--virtual-time-budget=10000',
                         '--dump-dom',
                         temp.name], stdout=PIPE) as chrome:
-                return chrome.stdout.read().decode('utf-8')
+                chrome_output = chrome.stdout.read().decode('utf-8')
+                self._logger.info(chrome_output)
+                return chrome_output
 
         except Exception as e:
             self._logger.error(f'Failed to render by JS: {e}')
