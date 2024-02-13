@@ -142,14 +142,12 @@ class Generator(object):
                                 self._options.logger)
         self._normalize_link_anchors(soup)
 
+        temporary_directory = pathlib.Path(config['site_dir']) / "temp"
+        temporary_directory.mkdir(exist_ok=True)
         if self._options.relaxed_js:
             html_string = str(soup)
         else:
-            temporary_directory = pathlib.Path(config['site_dir']) / "temp"
-            if not temporary_directory.exists():
-                temporary_directory.mkdir()
             html_string = self._render_js(soup, temporary_directory)
-            shutil.rmtree(temporary_directory)
 
         html_string = self._options.hook.pre_pdf_render(html_string)
 
@@ -170,6 +168,8 @@ class Generator(object):
             html = HTML(string=html_string)
             render = html.render()
             render.write_pdf(abs_pdf_path)
+
+        shutil.rmtree(temporary_directory, ignore_errors=True)
 
     # ------------------------
     def _remove_empty_tags(self, soup: PageElement):
