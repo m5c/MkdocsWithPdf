@@ -56,7 +56,6 @@ class HeadlessChromeDriver(object):
             self._logger.info("Rendering on `Headless Chrome`(execute JS).")
             with Popen([self._program_path,
                         '--disable-web-security',
-                        '--no-sandbox',
                         '--headless',
                         '--disable-gpu',
                         '--disable-web-security',
