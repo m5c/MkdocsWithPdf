@@ -24,7 +24,7 @@ class HeadlessChromeDriver(object):
 
     def render(self, html: str, temporary_directory: pathlib.Path) -> str:
         try:
-            mermaid_regex = r'<pre class="mermaid"><code>(.*?)</code></pre>'
+            mermaid_regex = r'<pre><code class="language-mermaid">(.*?)</code></pre>'
             mermaid_matches = re.findall(mermaid_regex, html, flags=re.DOTALL)
 
             # Convert each Mermaid diagram to an image.
@@ -47,7 +47,7 @@ class HeadlessChromeDriver(object):
 
                 # Replace the Mermaid code with the image in the HTML string.
                 image_html = f'<img src="file://{image_file_path}" alt="Mermaid diagram {i+1}">'
-                html = html.replace(f'<pre class="mermaid"><code>{mermaid_code}</code></pre>', image_html)
+                html = html.replace(f'<pre><code class="language-mermaid">{mermaid_code}</code></pre>', image_html)
 
             self._logger.info(f"Post mermaid translation: {html}")
             with open(temporary_directory / "post_mermaid_translation.html", "wb") as temp:

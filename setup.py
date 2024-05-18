@@ -15,7 +15,7 @@ setup(
     license='MIT',
     python_requires='>=3.6',
     install_requires=[
-        'mkdocs>=1.1',
+        'mkdocs>=1.6',
         'weasyprint>=0.44',
         'beautifulsoup4>=4.6.3',
         'libsass>=0.15'
