@@ -6,7 +6,7 @@
 ---
 
 This is a fork of the (presumed) [unmaintained `mkdocs-with-pdf` plugin](https://github.com/orzih/mkdocs-with-pdf/issues/142). Several patches of issues unmaintained in the
-original repo have been integrated, but notably fixed [indentation for nested markdown enumerations](https://github.com/orzih/mkdocs-with-pdf/commit/0571445f6a6b0dbb0ddc1b5dca3f09b743f16a63).
+original repo have been integrated, but notably fixed [indentation for nested markdown enumerations](https://github.com/orzih/mkdocs-with-pdf/commit/0571445f6a6b0dbb0ddc1b5dca3f09b743f16a63) and correct export of mermaid diagrams (using headless chrome)
 
 This plugin will generate a single PDF file from your MkDocs repository.
 This plugin is inspired by [MkDocs PDF Export Plugin][mkdocs-pdf-export-plugin].
@@ -46,6 +46,7 @@ This plugin is inspired by [MkDocs PDF Export Plugin][mkdocs-pdf-export-plugin].
     ```bash
     pip install -e git+https://github.com/domWalters/mkdocs-to-pdf.git@e26766d#egg=mkdocs-with-pdf
     ```
+ > Hint: You can also just clone/download the repo, `cd` inside, and call `pip install .`
 
 2. Enable the plugin in your `mkdocs.yml`:
 
