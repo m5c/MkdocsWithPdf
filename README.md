@@ -5,8 +5,12 @@
 
 ---
 
-This is a fork of the (presumed) [unmaintained `mkdocs-with-pdf` plugin](https://github.com/orzih/mkdocs-with-pdf/issues/142). Several patches of issues unmaintained in the
-original repo have been integrated, but notably fixed [indentation for nested markdown enumerations](https://github.com/orzih/mkdocs-with-pdf/commit/0571445f6a6b0dbb0ddc1b5dca3f09b743f16a63) and correct export of mermaid diagrams (using headless chrome)
+This is a fork of the (
+presumed) [unmaintained `mkdocs-with-pdf` plugin](https://github.com/orzih/mkdocs-with-pdf/issues/142). Several patches
+of issues unmaintained in the
+original repo have been integrated, but notably
+fixed [indentation for nested markdown enumerations](https://github.com/orzih/mkdocs-with-pdf/commit/0571445f6a6b0dbb0ddc1b5dca3f09b743f16a63)
+and correct export of mermaid diagrams (using headless chrome)
 
 This plugin will generate a single PDF file from your MkDocs repository.
 This plugin is inspired by [MkDocs PDF Export Plugin][mkdocs-pdf-export-plugin].
@@ -29,33 +33,49 @@ This plugin is inspired by [MkDocs PDF Export Plugin][mkdocs-pdf-export-plugin].
 
 ## Requirements
 
-1. This package requires MkDocs version 1.0 or higher (0.17 works as well)
-1. Python 3.6 or higher
-1. WeasyPrint depends on cairo, Pango and GDK-PixBuf which need to be installed separately. Please follow the
-   installation instructions for your platform carefully:
+* This package requires MkDocs version 1.0 or higher (0.17 works as well)
+* Python 3.6 or higher
+* WeasyPrint depends on cairo, Pango and GDK-PixBuf which need to be installed separately. Please follow the
+  installation instructions for your platform carefully:
     * [Linux][weasyprint-linux]
     * [MacOS][weasyprint-macos]
     * [Windows][weasyprint-windows]
+* Chrome, for headless mermaid to pdf rendering
+    * Install chrome, e.g. eith ``
 
 ## How to use
 
 ### Installation
 
-1. Install the package with pip: (Note, this installes this **patched** version, [not the (presumed) unmaintained version available on pypi](https://pypi.org/project/mkdocs-with-pdf/))
+1. Install the package with pip: (Note, this installes this **patched**
+   version, [not the (presumed) unmaintained version available on pypi](https://pypi.org/project/mkdocs-with-pdf/))
 
     ```bash
     pip install -e git+https://github.com/domWalters/mkdocs-to-pdf.git@e26766d#egg=mkdocs-with-pdf
     ```
- > Hint: You can also just clone/download the repo, `cd` inside, and call `pip install .`
+
+> Hint: You can also just clone/download the repo, `cd` inside, and call `pip install .`
 
 2. Enable the plugin in your `mkdocs.yml`:
 
-    ```yaml
-    plugins:
-        - with-pdf
-    ```
+```yaml
+plugins:
+    -   with-pdf:
+            author: 'John Doe'
+            copyright: 'Amazing enterprise you're working for'
+            cover: true
+            cover_subtitle: 'Some text slightly below the middle'
+            cover_title: 'Some text slighlty above the middle'
+            cover_logo: path/to/cover/logo.png
+            toc_title: 'Table of Content'
+            output_path: 'finalname.pdf'
+            render_js: true
+            headless_chrome_path: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
+```
 
-   More information about plugins in the [MkDocs documentation][mkdocs-plugins].
+ > Note: adapt `headless_chrome_path`, if you're not on MacOS. It is just the pointer to the main chrome bianry.
+
+More information about plugins in the [MkDocs documentation][mkdocs-plugins].
 
 #### Testing
 
