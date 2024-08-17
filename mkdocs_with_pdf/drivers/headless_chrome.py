@@ -41,13 +41,14 @@ class HeadlessChromeDriver(object):
                     # Write the Mermaid code to the file.
                     mermaid_code_unescaped = html_lib.unescape(mermaid_code)
                     mermaid_file.write(mermaid_code_unescaped.encode("utf-8"))
+                    self._logger.info(mermaid_code)
                     mermaid_file.flush()
 
                     # Create a filename for the image.
                     image_filename = os.path.join(self.output_dir, f"diagram_{i+1}.png")
 
                     # Convert the Mermaid diagram to an image using mmdc.
-                    command = f"mmdc -i {mermaid_file.name} -o {image_filename} -b transparent --scale 4"
+                    command = f"mmdc -p ../puppeteer-config.json -i {mermaid_file.name} -o {image_filename} -b transparent --scale 4"
                     os.system(command)
 
                     # Replace the Mermaid code with the image in the HTML string.
